@@ -27,6 +27,11 @@ class Book
      */
     private $year;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $author_id;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +57,18 @@ class Book
     public function setYear(int $year): self
     {
         $this->year = $year;
+
+        return $this;
+    }
+
+    public function getAuthorId(): ?int
+    {
+        return $this->author_id;
+    }
+
+    public function setAuthorId(int $author_id): self
+    {
+        $this->author_id = $author_id;
 
         return $this;
     }
