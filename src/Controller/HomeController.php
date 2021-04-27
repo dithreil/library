@@ -25,7 +25,7 @@ class HomeController extends AbstractController
 
     /**
      * Добавить случайного автора
-     * @Route("/author", name="create_author")
+     * @Route("/author", name="create_random_author")
      */
     public function createAuthor(): Response
     {

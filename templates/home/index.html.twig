@@ -3,7 +3,7 @@
 {% block title %} Главная страница {% endblock %}
 
 {% block body %}
-    <div class="container">Библиотека
+    <div>Библиотека
     {% if authors %}
     <table class="table table-striped">
         <thead>
@@ -17,8 +17,8 @@
                 <td>{{ author.id }}</td>
                 <td>{{ author.name }}</td>
                 <td>{{ author.surname }}</td>
-                <td><a href="/author/{{ author.id }}" class="btn btn-dark">Редактировать</a></td>
-                <td><a href="/author/{{ author.id }}" class="btn btn-dark">Список книг</a></td>
+                <td><a href="/authors/{{ author.id }}" class="btn btn-dark">Редактировать</a></td>
+                <td><a href="/authors/{{ author.id }}" class="btn btn-dark">Список книг</a></td>
             </tr>
         {% endfor %}
         </tbody>
