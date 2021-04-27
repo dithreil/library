@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\AuthorRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Book;
 
 /**
  * @ORM\Entity(repositoryClass=AuthorRepository::class)
@@ -27,12 +30,29 @@ class Author
      */
     private $surname;
 
-    public function getId(): ?int
+    /**
+     * Один автор может написать множество книг
+     * "@ORM\OneToMany(targetEntity="App\Entity\Book", mappedBy="author")
+     */
+    protected $books;
+
+    /**
+     * Author constructor.
+     */
+    public function __construct()
+    {
+        $this->books = new ArrayCollection();
+    }
+
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName():
+
+
+    string
     {
         return $this->name;
     }
@@ -54,5 +74,23 @@ class Author
         $this->surname = $surname;
 
         return $this;
+    }
+
+
+    public function getAuthor() : array
+    {
+        $author = [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'surname' => $this->getSurname()
+        ];
+
+        return $author;
+    }
+
+
+    public function getBooks() : ?Collection
+    {
+        return $this->books;
     }
 }

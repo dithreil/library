@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\BookRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Author;
 
 /**
  * @ORM\Entity(repositoryClass=BookRepository::class)
@@ -20,7 +21,7 @@ class Book
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $title;
 
     /**
      * @ORM\Column(type="smallint")
@@ -28,28 +29,30 @@ class Book
     private $year;
 
     /**
-     * @ORM\Column(type="integer")
+     * У книги есть единственный автор
+     * @ORM\ManyToOne(targetEntity="App\Entity\Author", inversedBy="books")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
-    private $author_id;
+    protected $author;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getYear(): ?int
+    public function getYear(): int
     {
         return $this->year;
     }
@@ -61,15 +64,25 @@ class Book
         return $this;
     }
 
-    public function getAuthorId(): ?int
+    public function getBook(): array
     {
-        return $this->author_id;
+        $book = [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'year' => $this->getYear()
+        ];
+
+        return $book;
     }
 
-    public function setAuthorId(int $author_id): self
+    /**
+     * @return mixed|array
+     */
+    public function getAuthor(): array
     {
-        $this->author_id = $author_id;
 
-        return $this;
+        return $this->author->getAuthor();
     }
+
+
 }
