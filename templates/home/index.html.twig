@@ -3,5 +3,28 @@
 {% block title %} Главная страница {% endblock %}
 
 {% block body %}
-    <div class="container">Библиотека</div>
+    <div class="container">Библиотека
+    {% if authors %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Авторы</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for author in authors %}
+            <tr>
+                <td>{{ author.id }}</td>
+                <td>{{ author.name }}</td>
+                <td>{{ author.surname }}</td>
+                <td><a href="/author/{{ author.id }}" class="btn btn-dark">Редактировать</a></td>
+                <td><a href="/author/{{ author.id }}" class="btn btn-dark">Список книг</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>Нет авторов для отображения</p>
+    {% endif %}
+    </div>
      {% endblock %}
