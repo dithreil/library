@@ -16,8 +16,9 @@ class HomeController extends AbstractController
      */
     public function index()
     {
+        $authors = ['Author1', 'Author2'];
         // return new Response('Home Controller');
-        return $this->render('home/index.html.twig');
+        return $this->render('home/index.html.twig', array('authors' => $authors));
     }
 
 }
