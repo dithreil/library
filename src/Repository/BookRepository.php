@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Author;
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -49,22 +50,34 @@ class BookRepository extends ServiceEntityRepository implements BookRepositoryIn
         return $this;
     }
 
-    // /**
-    //  * @return Book[] Returns an array of Book objects
-    //  */
-    /*
-    public function findByExampleField($value)
+
+    /**
+     * @param $value
+     * @return Book[] Returns an array of Book objects
+     */
+    public function findByTitleField($value)
     {
+
+
         return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('LOWER(b.title) LIKE :val')
+            ->setParameter('val', '%'.mb_strtolower($value).'%')
             ->orderBy('b.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
+    /**
+     * @param $author
+     * @return Book[] Returns an array of Book objects
+     */
+    public function findByAuthor(Author $author)
+    {
+        return $author->getBooks();
+    }
+
 
     /*
     public function findOneBySomeField($value): ?Book
