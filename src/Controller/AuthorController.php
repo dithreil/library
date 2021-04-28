@@ -45,7 +45,7 @@ class AuthorController extends AbstractController
         $form = $this->createForm(AuthorType::class, $author);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $this->authorService->handleCreate($form);
 
@@ -81,7 +81,7 @@ class AuthorController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -104,7 +104,7 @@ class AuthorController extends AbstractController
     {
         $author = $this->getDoctrine()->getRepository(Author::class)->find($id);
 
-        return $this->render('authors/show.html.twig', array ('author' => $author));
+        return $this->render('authors/show.html.twig', array('author' => $author));
     }
 
 }

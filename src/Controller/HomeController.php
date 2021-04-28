@@ -4,7 +4,6 @@
 namespace App\Controller;
 
 
-
 use App\Entity\Author;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +28,7 @@ class HomeController extends AbstractController
      */
     public function createAuthor(): Response
     {
-        $names = ['Алан','Ирвинг','Джордж','Кори','Эрнест','Терри','Нил','Роджер','Теодор','Стивен'];
+        $names = ['Алан', 'Ирвинг', 'Джордж', 'Кори', 'Эрнест', 'Терри', 'Нил', 'Роджер', 'Теодор', 'Стивен'];
         $surnames = ['Брэдли', 'Стоун', 'Мартин', 'Тейлор', 'Хемингуэй',
             'Прачетт', 'Стивенсон', 'Желязны', 'Драйзер', 'Кинг'];
 
@@ -38,8 +37,8 @@ class HomeController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $author = new Author();
-        $author->setName($names[random_int(0,9)]);
-        $author->setSurname($surnames[random_int(0,9)]);
+        $author->setName($names[random_int(0, 9)]);
+        $author->setSurname($surnames[random_int(0, 9)]);
 
         // tell Doctrine you want to (eventually) save the Author (no queries yet)
         $entityManager->persist($author);

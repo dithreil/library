@@ -1,11 +1,8 @@
 <?php
 
-
 namespace App\Service;
 
 use App\Repository\AuthorRepositoryInterface;
-use Doctrine\ORM\EntityManager;
-use App\Entity\Author;
 use Symfony\Component\Form\FormInterface;
 
 class AuthorService

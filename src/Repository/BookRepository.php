@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @method Book|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,11 +13,40 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Book[]    findAll()
  * @method Book[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BookRepository extends ServiceEntityRepository
+class BookRepository extends ServiceEntityRepository implements BookRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Book::class);
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * @param Book $book
+     * @return $this
+     */
+    public function setCreate(Book $book): BookRepositoryInterface
+    {
+        $this->entityManager->persist($book);
+        $this->entityManager->flush();
+
+        return $this;
+    }
+
+    /**
+     * @param Book $book
+     * @return $this
+     */
+    public function setSave(Book $book): BookRepositoryInterface
+    {
+        $this->entityManager->flush();
+
+        return $this;
     }
 
     // /**
