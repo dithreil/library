@@ -6,9 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Author;
 use App\Entity\Book;
-use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,6 +17,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BookController extends AbstractController
 {
+    /**
+     * @return Response
+     */
     public function index()
     {
         return new Response('Book Controller');
@@ -57,11 +58,12 @@ class BookController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             $book = $form->getData();
 
-            //dd($form);
-
             $entityManager = $this->getDoctrine()->getManager();
 
             $entityManager->persist($book);
+
+
+
             $entityManager->flush();
 
             return $this->redirectToRoute('index');
@@ -80,7 +82,7 @@ class BookController extends AbstractController
     public function show($id)
     {
         $author = $this->getDoctrine()->getRepository(Author::class)->find($id);
-
+        $b = $this->getDoctrine()->getRepository(Book::class)->find(1);
 
         $books = $author->getBooks();
 

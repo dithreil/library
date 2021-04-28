@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
+
 use App\Repository\AuthorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Book;
+
 
 /**
  * @ORM\Entity(repositoryClass=AuthorRepository::class)
@@ -31,10 +32,9 @@ class Author
     private $surname;
 
     /**
-     * Один автор может написать множество книг
-     * "@ORM\OneToMany(targetEntity="App\Entity\Book", mappedBy="author")
+     * @ORM\OneToMany(targetEntity=Book::class, mappedBy="author", orphanRemoval=true)
      */
-    protected $books;
+    private $books;
 
     /**
      * Author constructor.
@@ -44,19 +44,35 @@ class Author
         $this->books = new ArrayCollection();
     }
 
+    /**
+     * Author stringify.
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName().' '.$this->getSurname();
+    }
+
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName():
-
-
-    string
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return $this
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -64,11 +80,18 @@ class Author
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSurname(): ?string
     {
         return $this->surname;
     }
 
+    /**
+     * @param string|null $surname
+     * @return $this
+     */
     public function setSurname(?string $surname): self
     {
         $this->surname = $surname;
@@ -76,26 +99,41 @@ class Author
         return $this;
     }
 
-
-    public function getAuthor() : array
-    {
-        $author = [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'surname' => $this->getSurname()
-        ];
-
-        return $author;
-    }
-
-
-    public function getBooks() : ?Collection
+    /**
+     * @return Collection|Book[]
+     */
+    public function getBooks(): Collection
     {
         return $this->books;
     }
 
-    public function __toString() : string
+    /**
+     * @param Book $book
+     * @return $this
+     */
+    public function addBook(Book $book): self
     {
-        return $this->getName().' '.$this->getSurname();
+        if (!$this->books->contains($book)) {
+            $this->books[] = $book;
+            $book->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Book $book
+     * @return $this
+     */
+    public function removeBook(Book $book): self
+    {
+        if ($this->books->removeElement($book)) {
+            // set the owning side to null (unless already changed)
+            if ($book->getAuthor() === $this) {
+                $book->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
 }

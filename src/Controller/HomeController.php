@@ -38,8 +38,8 @@ class HomeController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $author = new Author();
-        $author->setName($names[random_int(1,10)]);
-        $author->setSurname($surnames[random_int(1,10)]);
+        $author->setName($names[random_int(0,9)]);
+        $author->setSurname($surnames[random_int(0,9)]);
 
         // tell Doctrine you want to (eventually) save the Author (no queries yet)
         $entityManager->persist($author);

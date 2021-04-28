@@ -5,6 +5,8 @@ namespace App\Controller;
 
 
 use App\Entity\Author;
+use App\Form\AuthorType;
+use App\Service\AuthorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,6 +18,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AuthorController extends AbstractController
 {
+    /**
+     * @var AuthorService
+     */
+    private $authorService;
+
+    public function __construct(AuthorService $authorService)
+    {
+        $this->authorService = $authorService;
+    }
+
     public function index()
     {
         return new Response('Author Controller');
@@ -30,26 +42,12 @@ class AuthorController extends AbstractController
     {
         $author = new Author();
 
-        $form = $this->createFormBuilder($author)
-            ->add('name', TextType::class, array('attr' =>
-            array('class' => 'form-control')))->add('surname', TextType::class, array(
-                'required' => false,
-                'attr' => array('class' => 'form-control')
-            ))
-        ->add('save', SubmitType::class, array(
-            'label' => 'Create',
-            'attr' => array('class' => 'btn btn-primary mt-3')
-        ))->getForm();
-
+        $form = $this->createForm(AuthorType::class, $author);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $author = $form->getData();
 
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($author);
-            $entityManager->flush();
+            $this->authorService->handleCreate($form);
 
             return $this->redirectToRoute('index');
         }
@@ -97,9 +95,10 @@ class AuthorController extends AbstractController
         ));
     }
 
-
     /**
      * @Route("/authors/{id}", name="show")
+     * @param $id
+     * @return Response
      */
     public function show($id)
     {
