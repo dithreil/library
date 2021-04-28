@@ -5,13 +5,18 @@ namespace App\Entity;
 
 use App\Repository\BookRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
+// константа - текущий год
+define('YEAR', intval(date("Y")));
 
 /**
  * @ORM\Entity(repositoryClass=BookRepository::class)
  */
 class Book
 {
+
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -21,11 +26,22 @@ class Book
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "Title must be at least {{ limit }} characters long",
+     *      maxMessage = "Title cannot be longer than {{ limit }} characters"
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="smallint")
+     * @Assert\Range(
+     *      min = 0,
+     *      max = YEAR,
+     *      notInRangeMessage = "Year range must be between {{ min }} and {{ max }}",
+     * )
      */
     private $year;
 
