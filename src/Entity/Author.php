@@ -93,4 +93,9 @@ class Author
     {
         return $this->books;
     }
+
+    public function __toString() : string
+    {
+        return $this->getName().' '.$this->getSurname();
+    }
 }

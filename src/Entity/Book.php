@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Author;
 use App\Repository\BookRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Author;
+
 
 /**
  * @ORM\Entity(repositoryClass=BookRepository::class)
@@ -34,6 +35,7 @@ class Book
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     protected $author;
+
 
     public function getId(): int
     {
@@ -78,10 +80,16 @@ class Book
     /**
      * @return mixed|array
      */
-    public function getAuthor(): array
+    public function getAuthor(): ?Author
     {
+        return $this->author;
+    }
 
-        return $this->author->getAuthor();
+    public function setAuthor(?Author $author): self
+    {
+        $this->author = $author;
+
+        return $this;
     }
 
 

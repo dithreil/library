@@ -12,13 +12,13 @@
         </tr>
         </thead>
         <tbody>
-        {% for author in authors %}
+        {% for a in authors %}
             <tr>
-                <td>{{ author.id }}</td>
-                <td>{{ author.name }}</td>
-                <td>{{ author.surname }}</td>
-                <td><a href="/authors/{{ author.id }}" class="btn btn-dark">Редактировать</a></td>
-                <td><a href="/authors/{{ author.id }}" class="btn btn-dark">Список книг</a></td>
+                <td>{{ a.id }}</td>
+                <td>{{ a.name }}</td>
+                <td>{{ a.surname }}</td>
+                <td><a href="{{ path('update_author', {'id' : a.id }) }}" class="btn btn-dark">Редактировать</a></td>
+                <td><a href="{{ path('show_books', {'id' : a.id }) }}" class="btn btn-dark">Список книг</a></td>
             </tr>
         {% endfor %}
         </tbody>

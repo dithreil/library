@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Книги {% endblock %}
+
+{% block body %}
+    <div>
+        <h3>Книги автора: {{ author.name }} {{ author.surname }}</h3>
+    </div>
+    {% if books %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Название</th><th>Год</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for b in books %}
+                <tr>
+                    <td>{{ b.title }}</td>
+                    <td>{{ b.year }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Книги данного автора не представлены</p>
+    {% endif %}
+
+
+    <a href="/">Назад</a>
+{% endblock %}

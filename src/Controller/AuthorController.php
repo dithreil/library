@@ -7,8 +7,8 @@ namespace App\Controller;
 use App\Entity\Author;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -58,6 +58,45 @@ class AuthorController extends AbstractController
             'form' => $form->createView()
         ));
     }
+
+    /**
+     * @Route("/authors/update/{id}", name="update_author")
+     * @param int $id
+     * @param Request $request
+     * @return Response|RedirectResponse
+     */
+    public function update(int $id, Request $request): Response
+    {
+        $author = $this->getDoctrine()->getRepository(Author::class)->find($id);
+
+        $form = $this->createFormBuilder($author)
+            ->add('name', TextType::class, array('attr' =>
+                array('class' => 'form-control')))
+            ->add('surname', TextType::class, array(
+                'required' => false,
+                'attr' => array('class' => 'form-control')
+            ))
+            ->add('save', SubmitType::class, array(
+                'label' => 'Edit',
+                'attr' => array('class' => 'btn btn-primary mt-3')
+            ))->getForm();
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('index');
+        }
+
+        return $this->render('authors/create.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
 
     /**
      * @Route("/authors/{id}", name="show")
