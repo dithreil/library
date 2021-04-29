@@ -24,7 +24,7 @@ class AuthorController extends AbstractController
     }
 
     /**
-     * @Route("/authors/create", name="create")
+     * @Route("/authors/create", name="create_author")
      * @param Request $request
      * @param AuthorService $authorService
      * @return Response
@@ -63,7 +63,7 @@ class AuthorController extends AbstractController
         AuthorToDataTransformer $adt
     ): Response
     {
-        $authorData = $adt->transformAuthorToData($this->getDoctrine()->getRepository(Author::class)->find($id));
+        $authorData = $adt->transformAuthorToData($authorService->findAuthorById($id));
 
         $form = $this->createForm(AuthorUpdateType::class, $authorData);
         $form->handleRequest($request);
@@ -81,7 +81,7 @@ class AuthorController extends AbstractController
     }
 
     /**
-     * @Route("/authors/{id}", name="show")
+     * @Route("/authors/{id}", name="show_author")
      * @param $id
      * @return Response
      */

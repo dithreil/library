@@ -58,4 +58,13 @@ class AuthorService
 
         $this->entityManager->flush();
     }
+
+    /**
+     * @param string $id
+     * @return Author
+     */
+    public function findAuthorById(string $id): Author
+    {
+        return $this->authorRepository->find($id);
+    }
 }

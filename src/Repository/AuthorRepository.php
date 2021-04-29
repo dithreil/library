@@ -18,7 +18,7 @@ class AuthorRepository extends ServiceEntityRepository implements AuthorReposito
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
     public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
@@ -26,6 +26,14 @@ class AuthorRepository extends ServiceEntityRepository implements AuthorReposito
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param string $id
+     * @return Author
+     */
+    public function findAuthorById(string $id): Author
+    {
+        return $this->find($id);
+    }
     // /**
     //  * @return Author[] Returns an array of Author objects
     //  */

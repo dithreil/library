@@ -6,5 +6,9 @@ use App\Entity\Author;
 
 interface AuthorRepositoryInterface
 {
-    //TODO: внедрить интерфейс
+    /**
+     * @param string $id
+     * @return Author
+     */
+    public function findAuthorById(string $id): Author;
 }
