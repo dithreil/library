@@ -3,30 +3,20 @@
 
 namespace App\Controller;
 
-
+use App\Dto\AuthorData;
+use App\Dto\Transformer\AuthorToDataTransformer;
 use App\Entity\Author;
-use App\Form\AuthorType;
+use App\Form\AuthorCreateType;
+use App\Form\AuthorUpdateType;
 use App\Service\AuthorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 class AuthorController extends AbstractController
 {
-    /**
-     * @var AuthorService
-     */
-    private $authorService;
-
-    public function __construct(AuthorService $authorService)
-    {
-        $this->authorService = $authorService;
-    }
 
     public function index()
     {
@@ -36,18 +26,19 @@ class AuthorController extends AbstractController
     /**
      * @Route("/authors/create", name="create")
      * @param Request $request
+     * @param AuthorService $authorService
      * @return Response
      */
-    public function create(Request $request): Response
+    public function createAction(Request $request, AuthorService $authorService): Response
     {
-        $author = new Author();
+        $authorData = new AuthorData();
 
-        $form = $this->createForm(AuthorType::class, $author);
+        $form = $this->createForm(AuthorCreateType::class, $authorData);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->authorService->handleCreate($form);
+            $authorService->handleCreate($form);
 
             return $this->redirectToRoute('index');
         }
@@ -59,33 +50,27 @@ class AuthorController extends AbstractController
 
     /**
      * @Route("/authors/update/{id}", name="update_author")
-     * @param int $id
+     * @param string $id
      * @param Request $request
+     * @param AuthorService $authorService
+     * @param AuthorToDataTransformer $adt
      * @return Response|RedirectResponse
      */
-    public function update(int $id, Request $request): Response
+    public function updateAction(
+        string $id,
+        Request $request,
+        AuthorService $authorService,
+        AuthorToDataTransformer $adt
+    ): Response
     {
-        $author = $this->getDoctrine()->getRepository(Author::class)->find($id);
+        $authorData = $adt->transformAuthorToData($this->getDoctrine()->getRepository(Author::class)->find($id));
 
-        $form = $this->createFormBuilder($author)
-            ->add('name', TextType::class, array('attr' =>
-                array('class' => 'form-control')))
-            ->add('surname', TextType::class, array(
-                'required' => false,
-                'attr' => array('class' => 'form-control')
-            ))
-            ->add('save', SubmitType::class, array(
-                'label' => 'Edit',
-                'attr' => array('class' => 'btn btn-primary mt-3')
-            ))->getForm();
-
+        $form = $this->createForm(AuthorUpdateType::class, $authorData);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->flush();
+            $authorService->handleUpdate($id, $form);
 
             return $this->redirectToRoute('index');
         }
@@ -100,7 +85,7 @@ class AuthorController extends AbstractController
      * @param $id
      * @return Response
      */
-    public function show($id)
+    public function showAction($id)
     {
         $author = $this->getDoctrine()->getRepository(Author::class)->find($id);
 

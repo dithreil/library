@@ -4,27 +4,19 @@
 namespace App\Controller;
 
 
+use App\Dto\BookData;
 use App\Entity\Author;
 use App\Entity\Book;
-use App\Form\BookType;
+use App\Form\BookCreateType;
 use App\Service\BookService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Uid\Uuid;
 
 class BookController extends AbstractController
 {
-    /**
-     * @var BookService
-     */
-    private $bookService;
-
-    public function __construct(BookService $bookService)
-    {
-        $this->bookService = $bookService;
-    }
-
     /**
      * @return Response
      */
@@ -36,18 +28,19 @@ class BookController extends AbstractController
     /**
      * @Route("/books/create", name="add_book")
      * @param Request $request
+     * @param BookService $bookService
      * @return Response
      */
-    public function create(Request $request)
+    public function createAction(Request $request, BookService $bookService)
     {
-        $book = new Book();
+        $book = new BookData();
 
-        $form = $this->createForm(BookType::class, $book);
+        $form = $this->createForm(BookCreateType::class, $book);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            $this->bookService->handleCreate($form);
+            $bookService->handleCreate($form);
 
             return $this->redirectToRoute('index');
         }
@@ -59,13 +52,12 @@ class BookController extends AbstractController
 
     /**
      * @Route("/books/{id}", name="show_books")
-     * @param $id
+     * @param Uuid $id
      * @return Response
      */
-    public function show($id)
+    public function showAction($id)
     {
         $author = $this->getDoctrine()->getRepository(Author::class)->find($id);
-        $b = $this->getDoctrine()->getRepository(Book::class)->find(1);
 
         $books = $author->getBooks();
 

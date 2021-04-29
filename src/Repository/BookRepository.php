@@ -28,30 +28,6 @@ class BookRepository extends ServiceEntityRepository implements BookRepositoryIn
     }
 
     /**
-     * @param Book $book
-     * @return $this
-     */
-    public function setCreate(Book $book): BookRepositoryInterface
-    {
-        $this->entityManager->persist($book);
-        $this->entityManager->flush();
-
-        return $this;
-    }
-
-    /**
-     * @param Book $book
-     * @return $this
-     */
-    public function setSave(Book $book): BookRepositoryInterface
-    {
-        $this->entityManager->flush();
-
-        return $this;
-    }
-
-
-    /**
      * @param $value
      * @return Book[] Returns an array of Book objects
      */

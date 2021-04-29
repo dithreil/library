@@ -3,8 +3,8 @@
 
 namespace App\Form;
 
+use App\Dto\BookData;
 use App\Entity\Author;
-use App\Entity\Book;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BookType extends AbstractType
+class BookCreateType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -22,13 +22,11 @@ class BookType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder
             ->add('title', TextType::class, array('attr' =>
-                array('class' => 'form-control')))->add('year', NumberType::class, array(
+                array(
+                    'required' => true,
+                    'class' => 'form-control')))
+            ->add('year', NumberType::class, array(
                 'required' => true,
-                'attr' => array(
-                    'min' => -5000,
-                    'max' => 2021,
-                    'step' => 1,
-                ),
             ))
             ->add('author', EntityType::class, array (
                 'label' => 'Выбор автора',
@@ -47,7 +45,7 @@ class BookType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Book::class,
+            'data_class' => BookData::class,
         ]);
     }
 }

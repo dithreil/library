@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-
+use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 use App\Repository\AuthorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=AuthorRepository::class)
@@ -16,10 +18,11 @@ class Author
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidV4Generator::class)
      */
-    private $id;
+    private Uuid $id;
 
     /**
      * @ORM\Column(type="string", length=150)
@@ -30,7 +33,7 @@ class Author
      *      maxMessage = "Name cannot be longer than {{ limit }} characters"
      * )
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="string", length=150, nullable=true)
@@ -39,20 +42,25 @@ class Author
      *      max = 150,
      *      minMessage = "Surname must be at least {{ limit }} characters long",
      *      maxMessage = "Surname cannot be longer than {{ limit }} characters"
-     * )Sur
+     * )
      */
-    private $surname;
+    private ?string $surname;
 
     /**
      * @ORM\OneToMany(targetEntity=Book::class, mappedBy="author", orphanRemoval=true)
      */
-    private $books;
+    private Collection $books;
 
     /**
      * Author constructor.
+     * @param string $name
+     * @param string|null $surname
      */
-    public function __construct()
+    public function __construct(string $name = "ar", string $surname = null )
     {
+        $this->id = Uuid::v4();
+        $this->name = $name;
+        $this->surname = $surname;
         $this->books = new ArrayCollection();
     }
 
@@ -66,9 +74,9 @@ class Author
     }
 
     /**
-     * @return int
+     * @return Uuid
      */
-    public function getId(): int
+    public function getId(): Uuid
     {
         return $this->id;
     }

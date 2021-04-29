@@ -26,30 +26,6 @@ class AuthorRepository extends ServiceEntityRepository implements AuthorReposito
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param Author $author
-     * @return $this
-     */
-    public function setCreate(Author $author): AuthorRepositoryInterface
-    {
-        $this->entityManager->persist($author);
-        $this->entityManager->flush();
-
-        return $this;
-    }
-
-    /**
-     * @param Author $author
-     * @return $this
-     */
-    public function setSave(Author $author): AuthorRepositoryInterface
-    {
-        $this->entityManager->flush();
-
-        return $this;
-    }
-
-
     // /**
     //  * @return Author[] Returns an array of Author objects
     //  */
