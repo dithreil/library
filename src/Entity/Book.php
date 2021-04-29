@@ -19,14 +19,14 @@ class Book
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\Column(type="uuid", unique=true, nullable=false)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidV4Generator::class)
      */
     private Uuid $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=false, nullable=false)
      * @Assert\Length(
      *      min = 2,
      *      max = 255,
@@ -37,7 +37,7 @@ class Book
     private string $title;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint", unique=false, nullable=false)
      * @Assert\Range(
      *      min = 0,
      *      max = YEAR,

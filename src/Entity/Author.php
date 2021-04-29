@@ -18,14 +18,14 @@ class Author
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\Column(type="uuid", unique=true, nullable=false)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidV4Generator::class)
      */
     private Uuid $id;
 
     /**
-     * @ORM\Column(type="string", length=150)
+     * @ORM\Column(type="string", length=150, unique=false, nullable=false)
      * @Assert\Length(
      *      min = 2,
      *      max = 150,
@@ -36,7 +36,7 @@ class Author
     private string $name;
 
     /**
-     * @ORM\Column(type="string", length=150, nullable=true)
+     * @ORM\Column(type="string", length=150, unique=false, nullable=true)
      * @Assert\Length(
      *      min = 2,
      *      max = 150,
